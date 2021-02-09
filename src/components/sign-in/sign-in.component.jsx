@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FormInput, Button } from "../index";
-
+import { auth } from "../../firebase/firebase.utils";
 import { signInWithGoogle } from "../../firebase/firebase.utils";
 
 import "./sign-in.styles.scss";
@@ -9,11 +9,16 @@ const SignIn = () => {
   const [email, updateEmail] = useState("");
   const [password, updatePassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    updateEmail("");
-    updatePassword("");
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      updateEmail("");
+      updatePassword("");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleChange = ({ target: { value, name } }) => {
